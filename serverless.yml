@@ -1,4 +1,4 @@
-service: abi-indexer-api
+service: indexer-server
 
 provider:
   name: aws
