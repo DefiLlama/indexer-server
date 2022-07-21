@@ -31,6 +31,7 @@ Chain = Literal[
     "arbitrum",
     "avalanche",
     "bsc",
+    "candle",
     "celo",
     "ethereum",
     "fantom",
