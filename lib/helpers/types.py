@@ -27,7 +27,17 @@ from aws_lambda_typing.context import Context
 APIGatewayEvent = APIGatewayProxyEventV2
 Context = Context
 
-Chain = Literal["arbitrum", "avalanche", "bsc", "ethereum", "fantom", "polygon"]
+Chain = Literal[
+    "arbitrum",
+    "avalanche",
+    "bsc",
+    "celo",
+    "ethereum",
+    "fantom",
+    "gnosis",
+    "harmony",
+    "polygon",
+]
 _chains = get_args(Chain)
 
 
