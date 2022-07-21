@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "serverless-ignore": "^0.2.1",
+    "serverless-offline": "^9.0.0",
+    "serverless-python-requirements": "^5.4.0"
+  }
+}

@@ -1,0 +1,5 @@
+hexbytes==0.2.2
+aws_lambda_typing==2.9.11
+psycopg==3.0.8
+psycopg-binary==3.0.8
+psycopg-pool==3.1
