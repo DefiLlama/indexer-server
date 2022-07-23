@@ -3,3 +3,4 @@
 .git/
 node_modules/
 .nvim/
+scripts/resolve_missing_function_args.py

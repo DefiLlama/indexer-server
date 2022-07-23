@@ -4,3 +4,4 @@ node_modules/
 .nvim/
 package-lock.json
 package.json
+scripts/
