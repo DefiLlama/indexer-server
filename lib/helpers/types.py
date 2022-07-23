@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from dataclasses import dataclass
+from datetime import datetime
 from decimal import Decimal
 from typing import (
     Any,
@@ -15,13 +17,10 @@ from typing import (
     get_origin,
     get_args,
 )
-from dataclasses import dataclass
-from datetime import datetime
-
-from hexbytes import HexBytes
 
 from aws_lambda_typing.events.api_gateway_proxy import APIGatewayProxyEventV2
 from aws_lambda_typing.context import Context
+from hexbytes import HexBytes
 
 # Alias
 APIGatewayEvent = APIGatewayProxyEventV2
@@ -69,7 +68,7 @@ class _Base:
                 setattr(self, field_name, actual_value)
                 continue
 
-            if field_name == "value":
+            if field_name == "value" and self.__class__ == Transaction:
                 # Convert ETH values.
                 if actual_value != 0:
                     actual_value /= Decimal("1e18")
@@ -92,9 +91,6 @@ class _Base:
                 raise TypeError(
                     f"{field_name}: '{type(actual_value)}' instead of '{field_def.type}'"
                 )
-
-    def serialize(self) -> Tuple:
-        ...
 
 
 @dataclass
@@ -146,3 +142,10 @@ class Log(_Base):
 class BlockNumber(_Base):
     number: int
     timestamp: datetime
+
+
+@dataclass
+class Approval(_Base):
+    contract_address: HexBytes
+    spender: str
+    value: Decimal
