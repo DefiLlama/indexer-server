@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from typing import Generator, List, Type, TypeVar
 from contextlib import contextmanager
-from typing import Generator
 import os
 
 from psycopg.abc import Params, Query
@@ -11,6 +11,7 @@ from psycopg.cursor import Cursor
 import psycopg_pool
 
 PSQL_CONN = psycopg_pool.ConnectionPool(os.environ["PSQL_URL"])
+T = TypeVar("T")
 
 
 @contextmanager
@@ -29,9 +30,6 @@ def get_psql_conn(**cursor_args) -> Generator[Cursor, None, None]:
         yield conn.cursor(**cursor_args)
 
 
-def exec_psql_query(sql: Query, params: Params, class_row_type):
+def exec_psql_query(sql: Query, params: Params, class_row_type: Type[T]) -> List[T]:
     with get_psql_conn(row_factory=class_row(class_row_type)) as c:
         return c.execute(sql, params).fetchall()
-
-    # Why would it ever reach here? Are you retarded mypy?
-    return []
