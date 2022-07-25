@@ -14,7 +14,7 @@ def contract_address_logs(event: APIGatewayEvent, context: Context):
     page = 0
 
     if (ev := event.get("pathParameters")) is not None:
-        contract_address = try_hexbytes(ev.get("contract_address", None))
+        contract_address = try_hexbytes(ev.get("contract_address"))
         chain = ev.get("chain")
 
     if not (chain := to_chain(chain)):

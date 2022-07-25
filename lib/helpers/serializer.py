@@ -38,6 +38,12 @@ class CustomJSONEncoder(json.JSONEncoder):
 
         super().default(o)
 
+    def encode(self, o):
+        if isinstance(o, dict):
+            o = {self._transform(k): self._transform(v) for k, v in o.items()}
+
+        return super().encode(o)
+
 
 class Request:
     @staticmethod

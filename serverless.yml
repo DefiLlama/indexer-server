@@ -50,6 +50,12 @@ functions:
       - http:
           path: /{chain}/address/transactions
           method: get
+  address_approvals:
+    handler: server/address.address_approvals
+    events:
+      - http:
+          path: /{chain}/address/approvals/{address}
+          method: get
   contract_address_logs:
     handler: server/contract.contract_address_logs
     events:

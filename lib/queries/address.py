@@ -1,14 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from collections import defaultdict
+from decimal import Decimal
 from typing import Optional
 
 from psycopg.sql import SQL, Identifier
 from hexbytes import HexBytes
 
-from lib.helpers.types import Chain, to_chain, Transaction
+from lib.helpers.types import Chain, to_chain, Transaction, Approval
+from lib.helpers.postgres import exec_psql_query
 
 _query = "SELECT * FROM {0}.transactions WHERE"
+_approvals_query = """
+SELECT
+    contract_address,
+    data_decoded->>'spender' AS "spender",
+    (data_decoded->>'value')::numeric AS "value"
+FROM
+    {0}.logs
+WHERE
+    event_decoded = 'Approval'
+    AND topics[4] IS NULL /* erc20 */
+    AND data_decoded->>'owner' = %s;
+"""
 
 
 def txs_to_address(
@@ -37,3 +52,20 @@ def txs_to_address(
 
     return (query, params, Transaction)
     # return exec_psql_query(query, params, Transaction)
+
+
+def exec_approvals_to_address(chain: Chain, address: HexBytes):
+    assert to_chain(chain)
+    query = SQL(_approvals_query).format(Identifier(chain))
+
+    ret = exec_psql_query(query, [address.hex()], Approval)
+    contract_addresses = defaultdict(lambda: defaultdict(Decimal))
+
+    # Handle Approvals of 0 (revoked approval).
+    for x in ret:
+        if x.value != 0:
+            contract_addresses[x.contract_address][x.spender] += x.value
+        else:
+            contract_addresses[x.contract_address][x.spender] = Decimal()
+
+    return contract_addresses
