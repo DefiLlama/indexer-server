@@ -30,6 +30,12 @@ def get_psql_conn(**cursor_args) -> Generator[Cursor, None, None]:
         yield conn.cursor(**cursor_args)
 
 
-def exec_psql_query(sql: Query, params: Params, class_row_type: Type[T]) -> List[T]:
-    with get_psql_conn(row_factory=class_row(class_row_type)) as c:
+def exec_psql_query(
+    sql: Query, params: Params, class_row_type: Type[T] = None
+) -> List[T]:
+    rf = None
+    if class_row_type is not None:
+        rf = class_row(class_row_type)
+
+    with get_psql_conn(row_factory=rf) as c:
         return c.execute(sql, params).fetchall()

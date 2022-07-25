@@ -56,6 +56,12 @@ functions:
       - http:
           path: /{chain}/address/approvals/{address}
           method: get
+  user_held_nfts:
+    handler: server/nfts.user_held_nfts
+    events:
+      - http:
+          path: /{chain}/nft/ids/{contract}/{user}
+          method: get
   contract_address_logs:
     handler: server/contract.contract_address_logs
     events:

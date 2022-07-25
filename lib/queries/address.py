@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
+from typing import Optional, Tuple
 from decimal import Decimal
-from typing import Optional
 
 from psycopg.sql import SQL, Identifier
 from hexbytes import HexBytes
@@ -12,7 +12,8 @@ from lib.helpers.types import Chain, to_chain, Transaction, Approval
 from lib.helpers.postgres import exec_psql_query
 
 _query = "SELECT * FROM {0}.transactions WHERE"
-_approvals_query = """
+_approvals_query = SQL(
+    """
 SELECT
     contract_address,
     data_decoded->>'spender' AS "spender",
@@ -24,6 +25,7 @@ WHERE
     AND topics[4] IS NULL /* erc20 */
     AND data_decoded->>'owner' = %s;
 """
+)
 
 
 def txs_to_address(
@@ -56,7 +58,7 @@ def txs_to_address(
 
 def exec_approvals_to_address(chain: Chain, address: HexBytes):
     assert to_chain(chain)
-    query = SQL(_approvals_query).format(Identifier(chain))
+    query = _approvals_query.format(Identifier(chain))
 
     ret = exec_psql_query(query, [address.hex()], Approval)
     contract_addresses = defaultdict(lambda: defaultdict(Decimal))
