@@ -44,4 +44,7 @@ def exec_held_nft_ids_to_address(
 
     ret = exec_psql_query(query, {"contract": contract, "user": user.hex()})
     # [('349',)]
+    if not ret:
+        return ()
+
     return ret[0]
