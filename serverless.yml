@@ -69,7 +69,7 @@ functions:
           path: /{chain}/contract/logs/{contract_address}
           method: get
   block_closest_timestamp:
-    handler: server/block.block_closest_timestamp
+    handler: server/blocks.block_closest_timestamp
     events:
       - http:
           path: /{chain}/block/closest/{timestamp}
