@@ -18,7 +18,7 @@ SELECT * FROM
     ORDER BY timestamp
     DESC LIMIT 1)
 ) as _
-ORDER BY abs(to_timestamp(%s) - timestamp) LIMIT 1;
+ORDER BY (to_timestamp(%s) - timestamp) LIMIT 1;
 """
 
 
