@@ -1,13 +1,15 @@
+org: blazewastaken
+app: defillama-indexer-server
 service: indexer-server
 
 provider:
   name: aws
   runtime: python3.8
   memorySize: 1024 # 1024 MB
-  timeout: 10
+  timeout: 20
   region: eu-central-1
   endpointType: REGIONAL # Set to regional because the api gateway will be behind a cloudfront distribution
-  stage: dev
+  stage: prod
   tracing: # Enable X-Ray tracing (debugging)
     apiGateway: true
     lambda: true

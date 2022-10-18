@@ -9,7 +9,7 @@ from lib.helpers.postgres import exec_psql_query
 
 
 def exec_paginate_query(
-    sql: Composed, params: List, class_row_type, /, page: int = 0, limit: int = 1000
+    sql: Composed, params: List, class_row_type, /, page: int = 0, limit: int = 500
 ):
     sql += SQL(" LIMIT {} OFFSET {}").format(limit, page * limit)
 

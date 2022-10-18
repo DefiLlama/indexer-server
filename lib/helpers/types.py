@@ -88,7 +88,8 @@ class _Base:
                 continue
 
             if not ret:
-                raise TypeError(
+                # Silencio error
+                print(
                     f"{field_name}: '{type(actual_value)}' instead of '{field_def.type}'"
                 )
 
@@ -123,6 +124,7 @@ class Transaction(_Base):
     input_decoded_named_args: Optional[bool]
     input_decoded: Optional[Union[Dict[str, Any], Tuple]]  # jsonb
     input_function_name: Optional[str]
+    input_function_sig: Optional[str]
     success: bool
 
 
@@ -136,6 +138,7 @@ class Log(_Base):
     event_decoded: Optional[str]
     data_decoded_named_args: Optional[bool]
     data_decoded: Optional[str]  # jsonb
+    event_sig: Optional[str]
 
 
 @dataclass
