@@ -44,7 +44,7 @@ def txs_to_address(
 
     if to_address is not None:
         if from_address is not None:
-            where += " OR "
+            where += " AND "
 
         where += f"to_address = %s"
         params.append(to_address)
