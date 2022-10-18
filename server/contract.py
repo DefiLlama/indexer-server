@@ -23,13 +23,29 @@ def contract_address_logs(event: APIGatewayEvent, context: Context):
         return Response.make_bad_request("`contract_address` is null")
 
     if (ev := event.get("queryStringParameters")) is not None:
+        topic0 = try_hexbytes(ev.get("topic0"))
+        txhash = try_hexbytes(ev.get("txhash"))
         page = int(ev.get("page", 0))
+
+        return Response.make_response(
+            exec_paginate_query(
+                *logs_to_contract_address(
+                    chain,
+                    contract_address,
+                    topic0,
+                    txhash,
+                ),
+                page=page,
+            )
+        )
 
     return Response.make_response(
         exec_paginate_query(
             *logs_to_contract_address(
                 chain,
                 contract_address,
+                None,
+                None,
             ),
             page=page,
         )
